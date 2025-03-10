@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Conversations</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                {% for conversation in conversations %}
+                <a href="{{ url_for('conversation', user_id=conversation['user'].id) }}" 
+                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ conversation['user'].username }}</strong>
+                        <p class="mb-1 text-muted small">
+                            {{ conversation['last_message'].content[:30] }}{% if conversation['last_message'].content|length > 30 %}...{% endif %}
+                        </p>
+                    </div>
+                    <small class="text-muted">
+                        {{ conversation['last_message'].created_at.strftime('%m-%d %H:%M') }}
+                    </small>
+                </a>
+                {% else %}
+                <div class="list-group-item text-center text-muted">
+                    No conversations yet
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Find Users</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('users') }}" class="btn btn-primary btn-block">
+                    <i class="fas fa-users"></i> Browse All Users
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-envelope fa-4x text-muted mb-3"></i>
+                <h3>Your Messages</h3>
+                <p class="text-muted">Select a conversation to view messages or start a new one.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

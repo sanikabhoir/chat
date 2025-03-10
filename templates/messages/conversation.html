@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Conversations</h5>
+            </div>
+            <div class="card-body p-0">
+                <a href="{{ url_for('messages') }}" class="btn btn-outline-secondary btn-block rounded-0">
+                    Back to All Conversations
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-circle mr-2"></i>
+                        {{ user.username }}
+                    </h5>
+                    <a href="{{ url_for('profile', user_id=user.id) }}" class="btn btn-sm btn-outline-secondary">
+                        View Profile
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="message mb-3 {% if message.sender_id == current_user.id %}text-right{% endif %}">
+                        <div class="message-bubble p-2 {% if message.sender_id == current_user.id %}bg-primary text-white{% else %}bg-light{% endif %}"
+                            style="display: inline-block; border-radius: 15px; max-width: 80%;">
+                            <div class="message-content">
+                                {{ message.content }}
+                            </div>
+                            <div class="message-time small {% if message.sender_id == current_user.id %}text-white-50{% else %}text-muted{% endif %}">
+                                {{ message.created_at.strftime('%H:%M') }}
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted py-3">
+                        No messages yet. Send your first message to start the conversation.
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="card-footer">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <div class="input-group">
+                        {{ form.content(class="form-control", placeholder="Type a message...") }}
+                        <div class="input-group-append">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </div>
+                    {% if form.content.errors %}
+                    <div class="text-danger mt-1">
+                        {% for error in form.content.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-scroll to bottom of messages on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        var messagesDiv = document.querySelector('.card-body');
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>Welcome, {{ current_user.username }}!</h1>
+        
+        <!-- Create post form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Share something</h5>
+                <form action="{{ url_for('new_post') }}" method="post">
+                    {{ form.hidden_tag() if form }}
+                    <div class="form-group">
+                        <textarea class="form-control" id="content" name="content" rows="3" placeholder="What's on your mind?"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Posts feed -->
+        <h2>Recent Posts</h2>
+        {% for post in posts %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="card-title mb-0">
+                        <a href="{{ url_for('profile', user_id=post.author.id) }}">
+                            {{ post.author.username }}
+                        </a>
+                    </h5>
+                    <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                </div>
+                <p class="card-text">{{ post.content }}</p>
+                {% if post.author == current_user %}
+                <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+                {% endif %}
+                <a href="{{ url_for('conversation', user_id=post.author.id) }}" class="btn btn-sm btn-primary {% if post.author == current_user %}d-none{% endif %}">
+                    <i class="fas fa-envelope"></i> Message
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info">No posts yet! Be the first to share something.</div>
+        {% endfor %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Quick Links</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{{ url_for('current_profile') }}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a href="{{ url_for('messages') }}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
+                <a href="{{ url_for('users') }}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-users"></i> Find Users
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

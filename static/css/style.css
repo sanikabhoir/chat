@@ -1,0 +1,63 @@
+/* Base styles */
+body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Message styling */
+.message-bubble {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Post hover effect */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Navbar customization */
+.navbar-brand {
+    font-weight: bold;
+}
+
+/* Form elements */
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Button hover effects */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+/* Profile page */
+.profile-header {
+    background-color: #343a40;
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .card-columns {
+        column-count: 1;
+    }
+}
